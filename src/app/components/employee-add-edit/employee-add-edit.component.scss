@@ -1,122 +1,171 @@
 /* employee-add-edit.component.scss */
 
-.employee-form-container {
-  width: 50%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #282c34; /* Dark background color */
-  color: #ffffff; /* Text color */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.employee-form-page {
+  width: 100%;
 }
 
-h2 {
+.form-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heading{
   font-size: 24px;
-  text-align: center;
+  width: 80%;
+  margin-top: 50px;
+
 }
 
-form {
-  margin-top: 20px;
+.form {
+  width: 80%;
+  padding: 20px;
 }
 
-.employee-form-field {
-  margin-bottom: 20px;
+.row{
+  display: flex;
+  justify-content: space-between;
+}
+.employee-form-field{
+  margin-bottom: 30px;
+  width: 47%;
 
   label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 
-  input,
-  select {
+  input{
     width: 100%;
     padding: 10px;
-    border: 1px solid #555; /* Darker border color */
+    border: 1px solid #b8b4b4; /* Darker border color */
     border-radius: 4px;
-    background-color: #444; /* Darker background color */
-    color: #ffffff; /* Text color */
-    transition: border-color 0.3s, background-color 0.3s; /* Smooth transition */
+    transition: border-color 0.3s; /* Smooth transition */
   }
 
-  input:focus,
-  select:focus {
+  input:focus {
     outline: none;
     border-color: #007bff; /* Border color on focus */
-    background-color: #555; /* Background color on focus */
   }
 
-  select {
-    appearance: none; /* Remove default arrow */
+  .gender-fields{
+    display: flex;
+    
+    .gender-radio-container{
+      display: flex;
+      margin: 5px 30px 0px 0px;
+      
+      input{
+        margin: 0;
+        cursor: pointer;
+      }
+      label{
+        margin: -1px 0px 0px 8px;
+        cursor: pointer;
+      }
+    }
   }
+
 }
 
 .skill-fields {
   margin-bottom: 20px;
-
-  .skill-field {
+  width: 47%;
+  .skills-top{
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 
-    input {
-      flex: 1;
+    .add-skill-btn{
+      padding: 10px; /* Increased padding */
+      background-color: #32a852; /* Add skill button background color */
+      color: #ffffff; /* Text color */
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s; /* Smooth transition */
+      font-weight: bold; /* Bold text */
+    }
+
+    .add-skill-btn:hover {
+      background-color: #278a42; /* Add skill button background color on hover */
+    }
+  }
+
+  .skill {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    input{
       margin-right: 10px;
-      border: 1px solid #555; /* Darker border color */
+    }
+
+    input,
+    select{
+      width: 47%;
+      border: 1px solid #b8b4b4; /* Darker border color */
       border-radius: 4px;
       padding: 10px;
-      background-color: #444; /* Darker background color */
-      color: #ffffff; /* Text color */
+      background-color: #ffffff; 
       transition: border-color 0.3s, background-color 0.3s; /* Smooth transition */
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       outline: none;
       border-color: #007bff; /* Border color on focus */
-      background-color: #555; /* Background color on focus */
     }
 
-    button {
-      padding: 10px 20px; /* Increased padding */
+    .delete-skill {
+      padding: 4px 8px; /* Increased padding */
       background-color: #dc3545; /* Delete button background color */
       color: #ffffff; /* Text color */
       border: none;
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s; /* Smooth transition */
+      margin-left: 50px;
     }
 
-    button:hover {
+    .delete-skill:hover {
       background-color: #c82333; /* Delete button background color on hover */
     }
   }
 
-  button[type="button"] {
-    padding: 10px 20px; /* Increased padding */
-    background-color: #007bff; /* Add skill button background color */
-    color: #ffffff; /* Text color */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s; /* Smooth transition */
-    margin-right: 10px; /* Added margin-right */
-  }
-
-  button[type="button"]:hover {
-    background-color: #0056b3; /* Add skill button background color on hover */
-  }
+  
 }
 
-button[type="submit"] {
-  width: 100%;
-  padding: 10px 0; /* Increased padding */
+.edit-control-btns{
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-btn {
+  width: 75px;
+  padding: 10px; /* Increased padding */
   background-color: #007bff; /* Submit button background color */
   color: #ffffff; /* Text color */
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s; /* Smooth transition */
+  font-weight: bold; /* Bold text */
 }
 
-button[type="submit"]:hover {
+.add-btn:hover {
   background-color: #0056b3; /* Submit button background color on hover */
+}
+
+.cancel-btn{
+  width: 75px;
+  padding: 10px; /* Increased padding */
+  background-color: #dc3545; /* Submit button background color */
+  color: #ffffff; /* Text color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition */
+  font-weight: bold; /* Bold text */
 }

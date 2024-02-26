@@ -4,35 +4,45 @@
     <table>
       <thead>
         <tr>
+          <th>Id</th>
           <th>Name</th>
-          <th>Contact Number</th>
           <th>Email</th>
+          <th>Contact</th>
           <th>Gender</th>
           <th>Skills</th>
-          <th>Actions</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let employee of employees">
-          <td>{{ employee.name }}</td>
-          <td>{{ employee.contactNumber }}</td>
-          <td>{{ employee.email }}</td>
-          <td>{{ employee.gender }}</td>
-          <td>
-            @for (skill of employee.skills; track $index) {
-              <span>
-                {{skill.skillName}}
-              </span>
-              <span>
-                (Exp. {{skill.experience}} years)
-              </span>
-            }
-          </td>
-          <td>
-            <button (click)="editEmployee(employee.id)">Edit</button>
-            <button (click)="deleteEmployee(employee.id)">Delete</button>
-          </td>
-        </tr>
+        @for (employee of employees; track $index) {
+          <tr class="{{($index+1)%2 === 0?'even-row':'odd-row'}}" >
+            <td>{{ employee.id | uppercase}}</td>
+            <td>{{ employee.name | titlecase}}</td>
+            <td>{{ employee.email | lowercase}}</td>
+            <td>{{ employee.contactNumber }}</td>
+            <td>{{ employee.gender | titlecase}}</td>
+            <td>
+              @for (skill of employee.skills; track $index) {
+                <div class="skill skill-{{$index+1}}">
+                  @if ( employee.skills.length !== 1 ) {
+                    <span>{{$index+1}}. </span>
+                  }
+                  <span>
+                    {{skill.skillName}}
+                  </span>
+                  <span>
+                    (Exp. {{skill.experience}} years)
+                  </span>
+                </div>
+              }
+            </td>
+            <td class="action-btns">
+              <button title="Edit" class="edit-action-btn" (click)="editEmployee(employee.id)"><i class="material-icons">edit</i></button>
+              <button title="Delete" class="delete-action-btn" (click)="deleteEmployee(employee.id)"><i class="material-icons">delete</i></button>
+            </td>
+          </tr>
+        }
+        
       </tbody>
     </table>
   </div>

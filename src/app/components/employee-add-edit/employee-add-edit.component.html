@@ -1,62 +1,106 @@
 <!-- employee-add-edit.component.html -->
 
-<div class="employee-form-container">
-  <h2>{{ isAddMode ? "Add Employee" : "Edit Employee" }}</h2>
-
-  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
-    <div class="employee-form-field">
-      <label for="name">Name</label>
-      <input type="text" formControlName="name" id="name" />
-    </div>
-
-    <div class="employee-form-field">
-      <label for="contactNumber">Contact Number</label>
-      <input type="text" formControlName="contactNumber" id="contactNumber" />
-    </div>
-
-    <div class="employee-form-field">
-      <label for="email">Email</label>
-      <input type="email" formControlName="email" id="email" />
-    </div>
-
-    <div class="employee-form-field">
-      <label for="gender">Gender</label>
-      <select formControlName="gender" id="gender">
-        <option value="">Select Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-    </div>
-
-    <div class="skill-fields" formArrayName="skills">
-      <div
-        *ngFor="let skill of skills.controls; let i = index"
-        class="skill-field"
-      >
-        <div class="skill-{{ i }}" [formGroupName]="i">
-          <input
-            type="text"
-            formControlName="skillName"
-            placeholder="Skill Name"
-          />
-          <input
-            type="text"
-            formControlName="experience"
-            placeholder="Experience"
-          />
-          <button
-            type="button"
-            class="delete-skill"
-            (click)="deleteSkill(i)"
-            [disabled]="skills.controls.length < 2"
-          >
-            Delete Skill
-          </button>
+<div class="employee-form-page">
+  <div class="form-container">
+    <h2 class="heading">{{ isAddMode ? "Add Employee" : "Edit Employee" }}</h2>
+  
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="form">
+      <!-- Employee ID and Name input -->
+      <div class="row">
+        <div class="employee-form-field">
+          <label for="id">Employee ID</label>
+          <input type="text" formControlName="id" id="id" placeholder="Enter ID" required />
+        </div>
+  
+        <div class="employee-form-field">
+          <label for="name">Name</label>
+          <input type="text" formControlName="name" id="name" placeholder="Enter name" required/>
         </div>
       </div>
-      <button type="button" (click)="addSkill()">Add Skill</button>
-    </div>
+      <!-- Contact no. and email input -->
+      <div class="row">
+        <div class="employee-form-field">
+          <label for="contactNumber">Contact Number</label>
+          <input type="text" formControlName="contactNumber" id="contactNumber" placeholder="Enter contact number" required/>
+        </div>
+  
+        <div class="employee-form-field">
+          <label for="email">Email</label>
+          <input type="email" formControlName="email" id="email" placeholder="Enter email" required/>
+        </div>
+      </div>
+      <!-- Skills and gender input -->
+      <div class="row">
+        <div class="skill-fields" formArrayName="skills">
+          <div class="skills-top">
+            <label>Skills</label>
 
-    <button type="submit">{{ isAddMode ? "Add" : "Update" }}</button>
-  </form>
+            <button type="button" class="add-skill-btn" (click)="addSkill()">Add Skill <span class="add-icon">+</span></button>
+          </div>
+
+          <div
+            *ngFor="let skill of skills.controls; let i = index"
+            class="skill-field"
+          >
+            <div class="skill skill-{{ i }}" [formGroupName]="i">
+              <input
+                type="text"
+                formControlName="skillName"
+                placeholder="Enter skill name"
+              />
+             <select name="experience" id="experience" formControlName="experience">
+              <option value="invalid" disabled >Select experience</option>
+              <option value="1"> 1 </option>
+              <option value="2"> 2 </option>
+              <option value="3"> 3 </option>
+              <option value="4"> 4 </option>
+              <option value="5"> 5 </option>
+              <option value="6"> 6 </option>
+              <option value="7"> 7 </option>
+              <option value="8"> 8 </option>
+              <option value="9"> 9 </option>
+              <option value="10+"> 10 + </option>
+             </select>
+              <button
+                type="button"
+                class="delete-skill"
+                (click)="deleteSkill(i)"
+                
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <div class="employee-form-field">
+          <label for="gender">Gender</label> 
+          <div class="gender-fields">
+            <div class="gender-radio-container">
+              <input type="radio" id="male" formControlName="gender" value="male">
+              <label for="male">Male</label>
+            </div>
+            <div class="gender-radio-container">
+              <input type="radio" id="female" formControlName="gender" value="female">
+              <label for="female">Female</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-control-btns">
+        
+        <!-- Submit button -->
+        <button type="submit" class="add-btn">{{ isAddMode ? "Submit" : "Update" }}</button>
+  
+        <!-- Cancel button  -->
+        @if(!isAddMode)
+        {
+          <button type="submit" routerLink="../employees" class="cancel-btn">Cancel</button>
+        }
+        
+      </div>
+  
+    </form>
+  </div>
 </div>

@@ -1,36 +1,43 @@
 /* employee-list.component.scss */
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-  
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      text-align: left;
-    }
-  
-    th {
-      background-color: #f2f2f2;
-    }
-  
-    td:last-child {
-      text-align: center;
-    }
-  }
-  button {
-    padding: 0.5rem;
-    background-color: #007bff;
-    color: white;
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
     border: none;
-    border-radius: 4px;
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #ffffff;
+  }
+
+
+  td:last-child {
+    text-align: center;
+  }
+
+  .odd-row{
+    background-color: #f2f2f2;
+  }
+
+  .action-btns{
+    display: flex;
+  }
+
+  button{   
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
-    margin-right: 0.5rem;
+    outline: inherit;
+    margin-right: 10px;
+  }
+
+
   }
   
-  button.delete {
-    background-color: #dc3545;
-  }
   

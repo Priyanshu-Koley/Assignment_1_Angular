@@ -22,14 +22,14 @@ export class EmployeeListComponent implements OnInit {
     this.employees = this.employeeService.getAllEmployees();
   }
 
-  deleteEmployee(id: number) {
+  deleteEmployee(id: string) {
     if (confirm('Are you sure you want to delete this employee?')) {
       this.employeeService.deleteEmployee(id);
       this.loadEmployees();
     }
   }
 
-  editEmployee(id: number) {
+  editEmployee(id: string) {
     this.router.navigate(['employee/edit/', id]);
   }
 }
