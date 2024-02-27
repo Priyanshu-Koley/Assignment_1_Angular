@@ -8,7 +8,7 @@
       <!-- Employee ID and Name input -->
       <div class="row">
         <div class="employee-form-field">
-          <label for="id">Employee ID</label>
+          <label for="id" class="id-label" >Employee ID</label>
           <input type="text" formControlName="id" id="id" placeholder="Enter ID" required />
         </div>
   
@@ -49,7 +49,7 @@
                 placeholder="Enter skill name"
               />
              <select name="experience" id="experience" formControlName="experience">
-              <option value="invalid" disabled >Select experience</option>
+              <option value=" " disabled >Select experience</option>
               <option value="1"> 1 </option>
               <option value="2"> 2 </option>
               <option value="3"> 3 </option>
@@ -65,7 +65,7 @@
                 type="button"
                 class="delete-skill"
                 (click)="deleteSkill(i)"
-                
+                [hidden]="skills.length <= 1"
               >
                 <i class="material-icons">delete</i>
               </button>
@@ -96,7 +96,7 @@
         <!-- Cancel button  -->
         @if(!isAddMode)
         {
-          <button type="submit" routerLink="../employees" class="cancel-btn">Cancel</button>
+          <a routerLink="/employees" class="cancel-btn">Cancel</a>
         }
         
       </div>

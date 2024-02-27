@@ -14,7 +14,7 @@
   font-size: 24px;
   width: 80%;
   margin-top: 50px;
-
+  padding-left: 20px;
 }
 
 .form {
@@ -46,6 +46,10 @@
   input:focus {
     outline: none;
     border-color: #007bff; /* Border color on focus */
+  }
+
+  #id:disabled{
+    cursor: not-allowed;
   }
 
   .gender-fields{
@@ -159,6 +163,7 @@
 }
 
 .cancel-btn{
+  text-decoration: none;
   width: 75px;
   padding: 10px; /* Increased padding */
   background-color: #dc3545; /* Submit button background color */

@@ -4,6 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../services/manage-employee.service';
+import { NgToastService } from 'ng-angular-popup';
+import { notNull } from '../../validators/notNull.validator';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-employee-add-edit',
@@ -16,29 +19,33 @@ export class EmployeeAddEditComponent implements OnInit {
   employeeId!: string;
   emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   indPhoneNumberRegex: RegExp = /^[56789]\d{9}$/;
+  errorFlag:boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private toast: NgToastService
   ) {}
 
   private createSkillFormGroup() {
     return this.formBuilder.group({
-      skillName: ['', Validators.required],
-      experience: ['invalid', Validators.required],
+      skillName: ['', [Validators.required, notNull.notNullValidation]],
+      experience: [' ', [Validators.required, notNull.notNullValidation]],
     });
   }
 
   ngOnInit(): void {
-
     this.employeeId = this.route.snapshot.params['id'];
     this.isAddMode = this.employeeId ? false : true;
 
     this.employeeForm = this.formBuilder.group({
-      id: ['',Validators.required],
-      name: ['', Validators.required],
+      id: [
+        { value: '', disabled: !this.isAddMode },
+        [Validators.required, notNull.notNullValidation],
+      ],
+      name: ['', [Validators.required, notNull.notNullValidation]],
       contactNumber: [
         '',
         [Validators.required, Validators.pattern(this.indPhoneNumberRegex)],
@@ -50,7 +57,7 @@ export class EmployeeAddEditComponent implements OnInit {
 
     if (!this.isAddMode) {
       const employee = this.employeeService.getEmployeeById(this.employeeId);
-      
+
       if (employee) {
         // Patching values for top-level controls
         this.employeeForm.patchValue({
@@ -92,27 +99,90 @@ export class EmployeeAddEditComponent implements OnInit {
     this.skills.removeAt(index);
   }
 
+  showErrorToast(errorField: string)
+  {
+    let title;
+    let message = `${errorField.toUpperCase()} can't be empty`;
+    
+    if(errorField === 'contactNumber')
+    {
+      errorField = 'Contact Number';
+      message = `${errorField.toUpperCase()} is incorrect or empty`;
+    }
+    else if(errorField === 'email')
+    {
+      message = `${errorField.toUpperCase()} is incorrect or empty`;
+    }
+      
+    title = `${errorField.toUpperCase()} is not valid`;
+    
+
+    this.toast.error({
+      detail: title,
+      summary: message,
+      duration: 2000,
+    });
+  }
+  showSuccessToast(employeeName:string,successField: string)
+  {
+    let message = `The Employee ${employeeName} is ${successField} successfully.`;
+    this.toast.success({
+      detail: message,
+      duration: 2000,
+    });
+  }
+
   onSubmit() {
     if (this.employeeForm.invalid) {
-      console.log(this.employeeForm.value);
 
-      // Log errors for each form control if needed
-      Object.keys(this.employeeForm.controls).forEach((key) => {
+      /// Log errors for each form control if needed
+      const formControls = Object.keys(this.employeeForm.controls);
+      for (let i = 0; i < formControls.length; i++) {
+        const key = formControls[i];
         const controlErrors = this.employeeForm.get(key)?.errors;
         if (controlErrors != null) {
-          console.log(`Validation errors for ${key}: `, controlErrors);
+          this.errorFlag = true; 
+          this.showErrorToast(key);
+          break; // Exit the loop
         }
-      });
+        else{
+          this.errorFlag = false;
+        }
+      }
+
+      if(!this.errorFlag)
+      {
+        // Log errors for each form control inside the skills array
+        const skillsFormArray = this.employeeForm.get('skills') as FormArray;
+        skillsFormArray.controls.forEach((skillGroup, index) => {
+          // Check if skillGroup is FormGroup
+          if (skillGroup instanceof FormGroup) {
+            // Log errors for each form control inside the skill FormGroup
+            for (const skillKey of Object.keys(skillGroup.controls)) {
+              const skillControlErrors = skillGroup.get(skillKey)?.errors;
+              if (skillControlErrors != null) {
+                this.showErrorToast(skillKey);
+                break; // Exit the for loop
+              }
+            }
+          }
+        });
+
+      }
       return;
     }
 
+    let employeeName:string = this.employeeForm.get('name')?.value;
     if (this.isAddMode) {
       this.employeeService.addEmployee(this.employeeForm.value);
-    } else {
+      this.showSuccessToast(employeeName,"added");
+    } 
+    else {
       this.employeeService.updateEmployee(
         this.employeeId,
         this.employeeForm.value
       );
+      this.showSuccessToast(employeeName,'updated');
     }
     this.router.navigate(['/employees']);
   }

@@ -23,7 +23,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   deleteEmployee(id: string) {
-    if (confirm('Are you sure you want to delete this employee?')) {
+    if (confirm(`Are you sure you want to delete ${{}}?`)) {
       this.employeeService.deleteEmployee(id);
       this.loadEmployees();
     }
