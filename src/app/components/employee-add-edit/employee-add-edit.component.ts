@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../services/manage-employee.service';
 import { NgToastService } from 'ng-angular-popup';
 import { notNull } from '../../validators/notNull.validator';
-import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-employee-add-edit',
@@ -19,7 +18,7 @@ export class EmployeeAddEditComponent implements OnInit {
   employeeId!: string;
   emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   indPhoneNumberRegex: RegExp = /^[56789]\d{9}$/;
-  errorFlag:boolean = false;
+  errorFlag: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -99,23 +98,25 @@ export class EmployeeAddEditComponent implements OnInit {
     this.skills.removeAt(index);
   }
 
-  showErrorToast(errorField: string)
-  {
+  toTitleCase(string: string) {
+    return string.replace(/\w\S*/g, 
+    function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+
+  showErrorToast(errorField: string) {
     let title;
-    let message = `${errorField.toUpperCase()} can't be empty`;
-    
-    if(errorField === 'contactNumber')
-    {
+    let message = `${this.toTitleCase(errorField)} can't be empty`;
+
+    if (errorField === 'contactNumber') {
       errorField = 'Contact Number';
-      message = `${errorField.toUpperCase()} is incorrect or empty`;
+      message = `${this.toTitleCase(errorField)} is incorrect or empty`;
+    } else if (errorField === 'email') {
+      message = `${this.toTitleCase(errorField)} is incorrect or empty`;
     }
-    else if(errorField === 'email')
-    {
-      message = `${errorField.toUpperCase()} is incorrect or empty`;
-    }
-      
-    title = `${errorField.toUpperCase()} is not valid`;
-    
+
+    title = `${this.toTitleCase(errorField)} is not valid`;
 
     this.toast.error({
       detail: title,
@@ -123,8 +124,7 @@ export class EmployeeAddEditComponent implements OnInit {
       duration: 2000,
     });
   }
-  showSuccessToast(employeeName:string,successField: string)
-  {
+  showSuccessToast(employeeName: string, successField: string) {
     let message = `The Employee ${employeeName} is ${successField} successfully.`;
     this.toast.success({
       detail: message,
@@ -133,25 +133,23 @@ export class EmployeeAddEditComponent implements OnInit {
   }
 
   onSubmit() {
+    // Check for any validation errors
     if (this.employeeForm.invalid) {
-
       /// Log errors for each form control if needed
       const formControls = Object.keys(this.employeeForm.controls);
       for (let i = 0; i < formControls.length; i++) {
         const key = formControls[i];
         const controlErrors = this.employeeForm.get(key)?.errors;
         if (controlErrors != null) {
-          this.errorFlag = true; 
+          this.errorFlag = true;
           this.showErrorToast(key);
           break; // Exit the loop
-        }
-        else{
+        } else {
           this.errorFlag = false;
         }
       }
 
-      if(!this.errorFlag)
-      {
+      if (!this.errorFlag) {
         // Log errors for each form control inside the skills array
         const skillsFormArray = this.employeeForm.get('skills') as FormArray;
         skillsFormArray.controls.forEach((skillGroup, index) => {
@@ -167,22 +165,32 @@ export class EmployeeAddEditComponent implements OnInit {
             }
           }
         });
-
       }
       return;
     }
 
-    let employeeName:string = this.employeeForm.get('name')?.value;
+    const employee = this.employeeService.getEmployeeById(
+      this.employeeForm.get('id')?.value
+    );
+    if (this.isAddMode && employee) {
+      this.toast.error({
+        detail: `Same ID exists!`,
+        summary: `ID can't be duplicate`,
+        duration: 2000,
+      });
+      return;
+    }
+
+    let employeeName: string = this.employeeForm.get('name')?.value;
     if (this.isAddMode) {
       this.employeeService.addEmployee(this.employeeForm.value);
-      this.showSuccessToast(employeeName,"added");
-    } 
-    else {
+      this.showSuccessToast(employeeName, 'added');
+    } else {
       this.employeeService.updateEmployee(
         this.employeeId,
         this.employeeForm.value
       );
-      this.showSuccessToast(employeeName,'updated');
+      this.showSuccessToast(employeeName, 'updated');
     }
     this.router.navigate(['/employees']);
   }

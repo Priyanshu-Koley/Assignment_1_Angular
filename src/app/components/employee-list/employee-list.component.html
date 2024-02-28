@@ -1,7 +1,12 @@
 <!-- employee-list.component.html -->
+@if(employees.length > 0)
+{
+  <div class="employee-list-container">
+    <div class="add-employee-btn-container">
+      <button class="add-employee-btn" routerLink="../employee/add">Add Employee</button>
+    </div>
 
-<div *ngIf="employees.length > 0; else noEmployees">
-    <table>
+    <table class="employee-list">
       <thead>
         <tr>
           <th>Id</th>
@@ -38,7 +43,7 @@
             </td>
             <td class="action-btns">
               <button title="Edit" class="edit-action-btn" (click)="editEmployee(employee.id)"><i class="material-icons">edit</i></button>
-              <button title="Delete" class="delete-action-btn" (click)="deleteEmployee(employee.id)"><i class="material-icons">delete</i></button>
+              <button title="Delete" class="delete-action-btn" (click)="deleteEmployee(employee.id,employee.name)"><i class="material-icons">delete</i></button>
             </td>
           </tr>
         }
@@ -46,8 +51,13 @@
       </tbody>
     </table>
   </div>
+
+}
+@else{
+  <div class="empty-employee-list">
+    <p>No employees found</p>
+  </div>
+
+}
   
-  <ng-template #noEmployees>
-    <p>No employees found.</p>
-  </ng-template>
   

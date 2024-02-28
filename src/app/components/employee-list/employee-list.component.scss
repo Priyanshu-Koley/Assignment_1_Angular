@@ -1,6 +1,26 @@
 /* employee-list.component.scss */
+.add-employee-btn-container{
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
 
-table {
+  .add-employee-btn  {
+    padding: 10px; /* Increased padding */
+    background-color: #32a852; /* Add skill button background color */
+    color: #ffffff; /* Text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition */
+    font-weight: bold; /* Bold text */
+  }
+
+  .add-employee-btn:hover {
+    background-color: #278a42; /* Add skill button background color on hover */
+  }
+
+}
+.employee-list {
   width: 100%;
   border-collapse: collapse;
 
@@ -11,8 +31,8 @@ table {
     text-align: left;
   }
 
-  th {
-    background-color: #ffffff;
+  tr{
+    border: 1px solid rgba(88, 87, 87, 0.545);
   }
 
 
@@ -21,7 +41,7 @@ table {
   }
 
   .odd-row{
-    background-color: #f2f2f2;
+    background-color: #e5e4e4;
   }
 
   .action-btns{
@@ -37,7 +57,15 @@ table {
     margin-right: 10px;
   }
 
+}
 
+.empty-employee-list{
+  p{
+    text-align: center;
+    color: rgb(166, 15, 45);
+    font-weight: bold;
+    margin-top: 50px;
   }
+}
   
   

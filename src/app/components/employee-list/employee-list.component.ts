@@ -3,6 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../../services/manage-employee.service';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-employee-list',
@@ -12,7 +13,7 @@ import { EmployeeService } from '../../services/manage-employee.service';
 export class EmployeeListComponent implements OnInit {
   employees: any[] = [];
 
-  constructor(private employeeService: EmployeeService, private router: Router) { }
+  constructor(private employeeService: EmployeeService, private router: Router, private toast: NgToastService) { }
 
   ngOnInit(): void {
     this.loadEmployees();
@@ -22,10 +23,16 @@ export class EmployeeListComponent implements OnInit {
     this.employees = this.employeeService.getAllEmployees();
   }
 
-  deleteEmployee(id: string) {
-    if (confirm(`Are you sure you want to delete ${{}}?`)) {
+  deleteEmployee(id: string,name: string) {
+    if (confirm(`Are you sure you want to delete ${name.toUpperCase()}?`)) {
       this.employeeService.deleteEmployee(id);
       this.loadEmployees();
+      this.toast.success(
+        {
+          detail: `The Employee ${name} is deleted successfully.`,
+          duration: 2000,
+        }
+      )
     }
   }
 
