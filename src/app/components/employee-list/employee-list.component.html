@@ -1,13 +1,17 @@
-<!-- employee-list.component.html -->
+<!-- Check if there are employees in the list -->
 @if(employees.length > 0)
 {
+  <!-- Container for the employee list -->
   <div class="employee-list-container">
+    <!-- Button to add a new employee -->
     <div class="add-employee-btn-container">
       <button class="add-employee-btn" routerLink="../employee/add">Add Employee</button>
     </div>
 
+    <!-- Table to display employee details -->
     <table class="employee-list">
       <thead>
+        <!-- Table header row -->
         <tr>
           <th>Id</th>
           <th>Name</th>
@@ -19,19 +23,26 @@
         </tr>
       </thead>
       <tbody>
+        <!-- Loop through each employee -->
         @for (employee of employees; track $index) {
+          <!-- Table row for each employee -->
           <tr class="{{($index+1)%2 === 0?'even-row':'odd-row'}}" >
+            <!-- Display employee details in each column -->
             <td>{{ employee.id | uppercase}}</td>
             <td>{{ employee.name | titlecase}}</td>
             <td>{{ employee.email | lowercase}}</td>
             <td>{{ employee.contactNumber }}</td>
             <td>{{ employee.gender | titlecase}}</td>
             <td>
+              <!-- Loop through each skill of the employee -->
               @for (skill of employee.skills; track $index) {
+                <!-- Display each skill -->
                 <div class="skill skill-{{$index+1}}">
+                  <!-- Display skill number if there is more than one skill -->
                   @if ( employee.skills.length !== 1 ) {
                     <span>{{$index+1}}. </span>
                   }
+                  <!-- Display skill name and experience -->
                   <span>
                     {{skill.skillName}}
                   </span>
@@ -41,23 +52,22 @@
                 </div>
               }
             </td>
+            <!-- Action buttons for each employee -->
             <td class="action-btns">
+              <!-- Edit button -->
               <button title="Edit" class="edit-action-btn" (click)="editEmployee(employee.id)"><i class="material-icons">edit</i></button>
+              <!-- Delete button -->
               <button title="Delete" class="delete-action-btn" (click)="deleteEmployee(employee.id,employee.name)"><i class="material-icons">delete</i></button>
             </td>
           </tr>
         }
-        
       </tbody>
     </table>
   </div>
-
 }
 @else{
+  <!-- Display message if no employees found -->
   <div class="empty-employee-list">
     <p>No employees found</p>
   </div>
-
 }
-  
-  

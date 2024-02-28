@@ -1,5 +1,3 @@
-// employee-add-edit.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +11,7 @@ import { notNull } from '../../validators/notNull.validator';
   styleUrls: ['./employee-add-edit.component.scss'],
 })
 export class EmployeeAddEditComponent implements OnInit {
+  // Define form group and other properties
   employeeForm!: FormGroup;
   isAddMode: boolean = true;
   employeeId!: string;
@@ -28,6 +27,7 @@ export class EmployeeAddEditComponent implements OnInit {
     private toast: NgToastService
   ) {}
 
+  // Helper function to create a FormGroup for a skill
   private createSkillFormGroup() {
     return this.formBuilder.group({
       skillName: ['', [Validators.required, notNull.notNullValidation]],
@@ -35,10 +35,12 @@ export class EmployeeAddEditComponent implements OnInit {
     });
   }
 
+  // Initialize component
   ngOnInit(): void {
     this.employeeId = this.route.snapshot.params['id'];
     this.isAddMode = this.employeeId ? false : true;
 
+    // Create the employee form with validation rules
     this.employeeForm = this.formBuilder.group({
       id: [
         { value: '', disabled: !this.isAddMode },
@@ -54,11 +56,12 @@ export class EmployeeAddEditComponent implements OnInit {
       skills: this.formBuilder.array([this.createSkillFormGroup()]),
     });
 
+    // If editing, populate the form with existing employee data
     if (!this.isAddMode) {
       const employee = this.employeeService.getEmployeeById(this.employeeId);
 
       if (employee) {
-        // Patching values for top-level controls
+        // Patch values for top-level controls
         this.employeeForm.patchValue({
           id: employee.id,
           name: employee.name,
@@ -67,7 +70,7 @@ export class EmployeeAddEditComponent implements OnInit {
           gender: employee.gender,
         });
 
-        // Patching values for skills FormArray
+        // Patch values for skills FormArray
         const skillsFormArray = this.employeeForm.get('skills') as FormArray;
         skillsFormArray.clear(); // Clear existing skills
 
@@ -86,18 +89,22 @@ export class EmployeeAddEditComponent implements OnInit {
     }
   }
 
+  // Getter for skills FormArray
   get skills() {
     return this.employeeForm.get('skills') as FormArray;
   }
 
+  // Method to add a new skill
   addSkill() {
     this.skills.push(this.createSkillFormGroup());
   }
 
+  // Method to delete a skill at a given index
   deleteSkill(index: number) {
     this.skills.removeAt(index);
   }
 
+  // Helper function to convert string to title case
   toTitleCase(string: string) {
     return string.replace(/\w\S*/g, 
     function (txt) {
@@ -105,6 +112,7 @@ export class EmployeeAddEditComponent implements OnInit {
     });
   }
 
+  // Method to show error toast with specific field name
   showErrorToast(errorField: string) {
     let title;
     let message = `${this.toTitleCase(errorField)} can't be empty`;
@@ -124,6 +132,8 @@ export class EmployeeAddEditComponent implements OnInit {
       duration: 2000,
     });
   }
+
+  // Method to show success toast with employee name and action
   showSuccessToast(employeeName: string, successField: string) {
     let message = `The Employee ${employeeName} is ${successField} successfully.`;
     this.toast.success({
@@ -132,6 +142,7 @@ export class EmployeeAddEditComponent implements OnInit {
     });
   }
 
+  // Method called on form submission
   onSubmit() {
     // Check for any validation errors
     if (this.employeeForm.invalid) {
@@ -172,26 +183,36 @@ export class EmployeeAddEditComponent implements OnInit {
     const employee = this.employeeService.getEmployeeById(
       this.employeeForm.get('id')?.value
     );
+    // Check if it's an add mode and if an employee with the same ID already exists
     if (this.isAddMode && employee) {
+      // If so, show an error toast indicating that the ID already exists
       this.toast.error({
         detail: `Same ID exists!`,
         summary: `ID can't be duplicate`,
         duration: 2000,
       });
-      return;
+      return; // Exit the function
     }
-
+    
+    // Get the name of the employee from the form
     let employeeName: string = this.employeeForm.get('name')?.value;
+    
     if (this.isAddMode) {
+      // If it's in add mode, call the employee service to add the new employee
       this.employeeService.addEmployee(this.employeeForm.value);
+      // Show success toast indicating that the employee has been added
       this.showSuccessToast(employeeName, 'added');
     } else {
+      // If it's in edit mode, call the employee service to update the employee
       this.employeeService.updateEmployee(
         this.employeeId,
         this.employeeForm.value
       );
+      // Show success toast indicating that the employee has been updated
       this.showSuccessToast(employeeName, 'updated');
     }
+    
+    // After adding or updating, navigate back to the employees page
     this.router.navigate(['/employees']);
   }
-}
+}    
